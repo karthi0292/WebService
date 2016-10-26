@@ -1,13 +1,12 @@
 package com.web.webservice;
 
 import android.os.StrictMode;
-import android.util.Base64;
+
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,9 +20,6 @@ import java.net.URL;
  */
 
 public class ServiceHelper {
-    public static String VALUE_AUTHENTICATION = "kbh:b1zw1zMob1leApps";
-    public static String VALUE_ENCODING_AUTHENTICATION = getEncodingAuthenticationKey();
-
     public ServiceHelper() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                 .permitAll().build();
@@ -36,11 +32,10 @@ public class ServiceHelper {
         try {
             URL mUrl = new URL(requestUrl);
             connection = (HttpURLConnection) mUrl.openConnection();
-            connection.setReadTimeout(10000);
-            connection.setConnectTimeout(15000);
+            connection.setReadTimeout(20000);
+            connection.setConnectTimeout(20000);
             connection.setRequestMethod(requestType);
             connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Authorization", VALUE_ENCODING_AUTHENTICATION);
             if (requestType.equals("POST")) {
                 connection.setDoOutput(true);
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(connection.getOutputStream());
@@ -73,11 +68,5 @@ public class ServiceHelper {
             }
         }
         return jsonObject;
-    }
-
-    private static String getEncodingAuthenticationKey() {
-        return "Basic "
-                + Base64.encodeToString(VALUE_AUTHENTICATION.getBytes(),
-                Base64.NO_WRAP);
     }
 }
